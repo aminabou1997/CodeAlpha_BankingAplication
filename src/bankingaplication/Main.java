@@ -98,38 +98,36 @@ public class Main {
             }
         }
 
-        // Preguntar al usuario si desea añadir un saldo inicial
-        System.out.print("Would you like to add an initial balance? (yes/no): ");
-        String response = scanner.nextLine().trim().toLowerCase();
-
-        if (response.equals("yes")) {
-            while (true) {
-                System.out.print("Enter initial balance: ");
-                if (scanner.hasNextDouble()) {
-                    initialBalance = scanner.nextDouble();
-                    if (initialBalance >= 0) {
-                        scanner.nextLine(); // Limpiar el buffer
-                        break; // Salir si el saldo inicial es válido
-                    } else {
-                        System.out.println("Initial balance cannot be negative. Please try again.");
-                    }
-                } else {
-                    System.out.println("That's not a valid amount. Please enter a valid number.");
-                    scanner.next(); // Limpiar el buffer
-                }
-            }
-        }
+        // Crear la cuenta primero
+        Account account = new Account(holderName, lastName, dni, iban);
 
         try {
-            // Crear la cuenta con los datos proporcionados
-            Account account = new Account(holderName, lastName, dni, iban);
+            accountManager.addAccount(account); // Ahora la cuenta está registrada en el sistema
 
-            // Asignar el saldo inicial opcional
-            if (initialBalance > 0) {
+            // Preguntar al usuario si desea añadir un saldo inicial
+            System.out.print("Would you like to add an initial balance? (yes/no): ");
+            String response = scanner.nextLine().trim().toLowerCase();
+
+            if (response.equals("yes")) {
+                while (true) {
+                    System.out.print("Enter initial balance: ");
+                    if (scanner.hasNextDouble()) {
+                        initialBalance = scanner.nextDouble();
+                        if (initialBalance >= 0) {
+                            scanner.nextLine(); // Limpiar el buffer
+                            break; // Salir si el saldo inicial es válido
+                        } else {
+                            System.out.println("Initial balance cannot be negative. Please try again.");
+                        }
+                    } else {
+                        System.out.println("That's not a valid amount. Please enter a valid number.");
+                        scanner.next(); // Limpiar el buffer
+                    }
+                }
+                // Agregar el saldo inicial
                 accountManager.deposit(iban, initialBalance); // Añadir el saldo inicial
             }
 
-            accountManager.addAccount(account); // Añadir la cuenta al sistema
             System.out.println("Account successfully created for " + holderName + " " + lastName + ".");
             System.out.println("Account details: DNI - " + dni + ", IBAN - " + iban + ", Initial Balance - " + initialBalance);
         } catch (IllegalArgumentException e) {

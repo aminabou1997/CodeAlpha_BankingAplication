@@ -16,6 +16,7 @@ public class Account {
 
     // Constructor principal sin saldo inicial
     public Account(String holderName, String lastName, String dni, String iban) {
+        // Validación de los datos
         if (!Validator.validarNombre(holderName)) {
             throw new IllegalArgumentException("Invalid first name.");
         }
@@ -29,25 +30,28 @@ public class Account {
             throw new IllegalArgumentException("Invalid IBAN.");
         }
 
+        // Inicialización de los valores
         this.holderName = holderName;
         this.lastName = lastName;
         this.dni = dni;
         this.iban = iban;
-        this.balance = 0.0; // Default balance
+        this.balance = 0.0; // Saldo inicial por defecto
     }
 
-// Constructor adicional con saldo inicial
+    // Constructor adicional con saldo inicial
     public Account(String holderName, String lastName, String dni, String iban, double initialBalance) {
         this(holderName, lastName, dni, iban); // Llamar al constructor principal
 
+        // Validación del saldo inicial
         if (initialBalance < 0) {
             throw new IllegalArgumentException("Initial balance cannot be negative.");
         }
 
-        this.balance = initialBalance; // Establecer el saldo inicial
+        // Asignación del saldo inicial
+        this.balance = initialBalance;
     }
 
-    // Getters and setters
+    // Getters y setters
     public String getHolderName() {
         return holderName;
     }
@@ -101,11 +105,14 @@ public class Account {
     }
 
     public void setBalance(double balance) {
+        if (balance < 0) {
+            throw new IllegalArgumentException("Balance cannot be negative.");
+        }
         this.balance = balance;
     }
 
     /**
-     * Displays the account details.
+     * Muestra los detalles de la cuenta.
      */
     public void displayAccountDetails() {
         System.out.println("Account Details:");

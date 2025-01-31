@@ -27,37 +27,42 @@ public class AccountManager {
 
     // Deposit funds
     public void deposit(String iban, double amount) {
-        Account account = getAccount(iban);
-        if (account == null) {
-            throw new IllegalArgumentException("Account not found.");
+        // Verificar si la cuenta existe
+        if (!accountExists(iban)) {
+            throw new IllegalArgumentException("Account with IBAN " + iban + " not found.");
         }
+        Account account = getAccount(iban);
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be greater than zero.");
         }
         account.setBalance(account.getBalance() + amount);
+        System.out.println("Deposited " + amount + " to account " + iban);
     }
 
     // Withdraw funds
     public void withdraw(String iban, double amount) {
-        Account account = getAccount(iban);
-        if (account == null) {
-            throw new IllegalArgumentException("Account not found.");
+        // Verificar si la cuenta existe
+        if (!accountExists(iban)) {
+            throw new IllegalArgumentException("Account with IBAN " + iban + " not found.");
         }
+        Account account = getAccount(iban);
         if (amount <= 0) {
             throw new IllegalArgumentException("Withdrawal amount must be greater than zero.");
         }
         if (amount > account.getBalance()) {
-            throw new IllegalArgumentException("Insufficient balance.");
+            throw new IllegalArgumentException("Insufficient balance in account " + iban);
         }
         account.setBalance(account.getBalance() - amount);
+        System.out.println("Withdrew " + amount + " from account " + iban);
     }
 
     // Get account balance
     public double getBalance(String iban) {
-        Account account = getAccount(iban);
-        if (account == null) {
-            throw new IllegalArgumentException("Account not found.");
+        // Verificar si la cuenta existe
+        if (!accountExists(iban)) {
+            throw new IllegalArgumentException("Account with IBAN " + iban + " not found.");
         }
+        Account account = getAccount(iban);
         return account.getBalance();
     }
 }
